@@ -13,7 +13,8 @@ final class MovieQuizViewController: UIViewController {
         let currentQuestion = questions[currentQuestionIndex]
         // Конвертируем вопрос в QuizStepViewModel
         let viewModel = convert(model: currentQuestion)
-        
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20 // радиус скругления углов рамки
         // Отображаем вопрос на экране
         show(quiz: viewModel)
         
@@ -31,7 +32,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
-        let currentQuestion = questions[currentQuestionIndex] //
+        let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)// Проверяем ответ
         // выключаем кнопки
@@ -105,7 +106,6 @@ final class MovieQuizViewController: UIViewController {
             correctAnswer: false)
     ]
     // переменная с индексом текущего вопроса, начальное значение 0
-    // (по этому индексу будем искать вопрос в массиве, где индекс первого элемента 0, а не 1)
     private var currentQuestionIndex = 0
     // переменная со счётчиком правильных ответов, начальное значение закономерно 0
     private var correctAnswers = 0
@@ -113,10 +113,10 @@ final class MovieQuizViewController: UIViewController {
     
     // приватный метод конвертации, который принимает моковый вопрос и возвращает вью модель для главного экрана
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel( // 1
-            image: UIImage(named: model.image) ?? UIImage(), // 2
-            question: model.text, // 3
-            questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)") // 4
+        let questionStep = QuizStepViewModel(
+            image: UIImage(named: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
         return questionStep
     }
     
@@ -125,9 +125,7 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 0 //гасим рамку
-        imageView.layer.cornerRadius = 20 // радиус скругления углов рамки
         //  включаем кнопки
         yesButton.isEnabled = true
         noButton.isEnabled = true
@@ -138,9 +136,7 @@ final class MovieQuizViewController: UIViewController {
         if isCorrect {
             correctAnswers += 1
         }
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8 // толщина рамеи
-        imageView.layer.cornerRadius = 20 // радиус скругления углов рамки
+        imageView.layer.borderWidth = 8 // толщина рамки
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

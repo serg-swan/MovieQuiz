@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-class AlertPresenter {
+final class AlertPresenter {
     weak var controller: MovieQuizViewController? // Инъектируем контроллер
     init(controller: MovieQuizViewController) {
         self.controller = controller

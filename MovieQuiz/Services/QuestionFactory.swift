@@ -9,10 +9,6 @@ import Foundation
 final class QuestionFactory: QuestionFactoryProtocol {
     private let moviesLoader: MoviesLoading
     weak var delegate: QuestionFactoryDelegate?
-    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
-        self.delegate = delegate
-        self.moviesLoader = moviesLoader
-    }
     private var movies: [MostPopularMovie] = []
     /*
      private let questions: [QuizQuestion] = [
@@ -59,6 +55,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
      ]
      закоментируем код для дальнейшего спринта
      */
+    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
+        self.delegate = delegate
+        self.moviesLoader = moviesLoader
+    }
     
     func requestNextQuestion() {
         /*
@@ -72,7 +72,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
          закоментируем код для дальнейшего спринта
          */
         DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             let index = (0..<self.movies.count).randomElement() ?? 0
             
             guard let movie = self.movies[safe: index] else { return }
@@ -103,7 +103,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
                                         correctAnswer: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.delegate?.didReceiveNextQuestion(question: question)
             }
         }
@@ -112,7 +112,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
     func loadData() {
         moviesLoader.loadMovies { [weak self] result in
             DispatchQueue.main.async {
-                guard let self = self else { return }
+                guard let self else { return }
                 switch result {
                 case .success(let mostPopularMovies):
                     self.movies = mostPopularMovies.items // сохраняем фильм в нашу новую переменную

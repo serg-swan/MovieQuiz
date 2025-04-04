@@ -102,6 +102,9 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="ENy-xK-KwB">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
@@ -113,9 +116,12 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="iTr-eh-2Hd" secondAttribute="trailing" constant="20" id="g86-Sz-nwM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="q9V-8U-lnH" secondAttribute="bottom" id="iut-9r-8RX"/>
                             <constraint firstItem="q9V-8U-lnH" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="nlh-C2-fb9"/>
+                            <constraint firstItem="ENy-xK-KwB" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vfR-Ym-g7Z"/>
+                            <constraint firstItem="ENy-xK-KwB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="yA2-gZ-4mk"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="ENy-xK-KwB" id="z1c-C1-ezV"/>
                         <outlet property="counterLabel" destination="bxz-m7-x2v" id="u5M-Uf-gxy"/>
                         <outlet property="imageView" destination="aUx-oT-A9w" id="hno-Xk-1Mo"/>
                         <outlet property="noButton" destination="365-p9-Knx" id="rNP-oE-VR0"/>

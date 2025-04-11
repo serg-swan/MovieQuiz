@@ -8,14 +8,17 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var counterLabel: UILabel!
+    
     // MARK: - Private Properties
-    private let questionsAmount: Int = 10 // всего вопросов
+    private let presenter = MovieQuizPresenter()
+   // private let questionsAmount: Int = 10 // всего вопросов
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
-    private var currentQuestionIndex = 0
+  //  private var currentQuestionIndex: Int = 0
     private var correctAnswers = 0 //счетчик правильных ответов
     private var alertPresenter: AlertPresenter?
     private var statisticService: StatisticServiceProtocol?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad() // Вызов реализации родительского класса
@@ -34,7 +37,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         // проверка, что вопрос не nil
         guard let question else { return }
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
@@ -57,7 +60,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - IBAction
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
+        guard let currentQuestion else {
             return
         }
         let givenAnswer = true
@@ -67,7 +70,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
+        guard let currentQuestion else {
             return
         }
         let givenAnswer = false
@@ -82,7 +85,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         yesButton.isEnabled = false
         noButton.isEnabled = false
     }
-    
+    /*
     // приватный метод конвертации, который принимает моковый вопрос и возвращает вью модель для главного экрана
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
@@ -91,7 +94,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         return questionStep
     }
-    
+    */
     // приватный метод вывода на экран вопроса, который принимает на вход вью модель вопроса и ничего не возвращает
     private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
@@ -121,27 +124,27 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // приватный метод, который содержит логику перехода в один из сценариев
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
+        if presenter.isLastQuestion() {
             // идём в состояние "Результат квиза"
-            statisticService?.store(correct: correctAnswers, total: questionsAmount)
-            let text = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n" +
+            statisticService?.store(correct: correctAnswers, total: presenter.questionsAmount)
+            let text = "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)\n" +
             "Количество сыгранных квизов: \(statisticService?.gamesCount ?? 0)\n" +
             "Рекорд: \((statisticService?.bestGame.correct ?? 0)) /\(statisticService?.bestGame.total ?? 0) (\(statisticService?.bestGame.date.dateTimeString ?? "" ))\n " +
             "Средняя точность: \(String(format: "%.2f", statisticService?.totalAccuracy ?? 0.00))%"
             let viewModel = AlertModel(
+                id: "Game results",
                 title: "Этот раунд окончен!",
                 message: text,
-                buttonText: "Сыграть ещё раз")
-            {[weak self] in
-                guard let self else { return }
-                self.currentQuestionIndex = 0
-                self.correctAnswers = 0
-                self.questionFactory?.requestNextQuestion()
-            }
+                buttonText: "Сыграть ещё раз") {[weak self] in
+                    guard let self else { return }
+                    self.presenter.resetQuestionIndex()
+                    self.correctAnswers = 0
+                    self.questionFactory?.requestNextQuestion()
+                }
             alertPresenter?.showResult(quiz: viewModel)
             
         } else {
-            currentQuestionIndex += 1
+            self.presenter.switchToNextQuestionIndex()
             self.questionFactory?.requestNextQuestion()
         }
     }
@@ -153,14 +156,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNetworkError() {
         hideLoadingIndicator() // скрываем индикатор загрузки
-        let model = AlertModel(title: "Что то пошло не так(",
-                               message: "Невозможно загрузить данные",
-                               buttonText: "Попробовать еще раз") { [weak self] in
-            guard let self else { return }
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            self.questionFactory?.loadData()
-        }
+        let model = AlertModel(
+            id: " ",
+            title: "Что то пошло не так(",
+            message: "Невозможно загрузить данные",
+            buttonText: "Попробовать еще раз") { [weak self] in
+                guard let self else { return }
+                self.presenter.resetQuestionIndex()
+                self.correctAnswers = 0
+                self.questionFactory?.loadData()
+            }
         showLoadingIndicator()
         alertPresenter?.showResult(quiz: model)
     }

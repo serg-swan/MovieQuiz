@@ -7,22 +7,23 @@
 
 import Foundation
 import UIKit
+
 final class AlertPresenter {
     weak var controller: MovieQuizViewController? // Инъектируем контроллер
     init(controller: MovieQuizViewController) {
         self.controller = controller
     }
     
-     func showResult(quiz result: AlertModel) {
+     func showAlert(quiz model: AlertModel) {
         let alert = UIAlertController(
-            title: result.title,
-            message: result.message,
+            title: model.title,
+            message: model.message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
-            result.completion?()
+        let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
+            model.completion?()
         }
-         alert.view.accessibilityIdentifier = result.id
+         alert.view.accessibilityIdentifier = model.id
         alert.addAction(action)
         controller?.present(alert, animated: true, completion: nil)
     }

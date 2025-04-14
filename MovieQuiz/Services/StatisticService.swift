@@ -7,8 +7,8 @@
 
 import Foundation
 final class StatisticService: StatisticServiceProtocol {
-    weak var controller: MovieQuizViewController? // Инъектируем контроллер
-    init(controller: MovieQuizViewController) {
+    weak var controller: MovieQuizPresenter? // Инъектируем контроллер
+    init(controller: MovieQuizPresenter) {
         self.controller = controller
     }
     private let storage: UserDefaults = .standard

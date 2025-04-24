@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 protocol StatisticServiceProtocol {
     var gamesCount: Int { get } // кол-во завершенных игр
     var bestGame: GameResult { get } // информация о лучшей попытке

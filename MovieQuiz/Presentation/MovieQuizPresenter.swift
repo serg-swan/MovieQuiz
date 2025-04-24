@@ -10,8 +10,8 @@ import Foundation
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     // MARK: - Private Properties
-
-   private var currentQuestion: QuizQuestion?
+    
+    private var currentQuestion: QuizQuestion?
     private  let questionsAmount: Int = 10 // всего вопросов
     private var correctAnswers: Int = 0
     
@@ -19,7 +19,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var currentQuestionIndex: Int = 0
     private  weak var viewController: MovieQuizViewControllerProtocol?
     private var statisticService: StatisticServiceProtocol?
-   
+    
     // MARK: - Initializers
     
     init(viewController: MovieQuizViewControllerProtocol?) {
@@ -47,8 +47,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     // загрузка не удалась
     func didFailToLoadData() {
-        
-        viewController?.showNetworkError() //
+        viewController?.showNetworkError()
     }
     
     // метод скрытия индикатора загрузки
@@ -147,9 +146,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    
     // приватный метод, который меняет цвет рамки
-   private func proceedWithAnswer(isCorrect: Bool) {
+    private func proceedWithAnswer(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
@@ -165,14 +163,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 }
 
 protocol MovieQuizViewControllerProtocol: AnyObject {
-        func show(quiz step: QuizStepViewModel)
-        func showResult(quiz result: QuizResultsViewModel)
-        func highlightImageBorder(isCorrectAnswer: Bool)
-        func showLoadingIndicator()
-        func hideLoadingIndicator()
-        func showNetworkError()
-        func buttonLock()
+    func show(quiz step: QuizStepViewModel)
+    func showResult(quiz result: QuizResultsViewModel)
+    func highlightImageBorder(isCorrectAnswer: Bool)
+    func showLoadingIndicator()
+    func hideLoadingIndicator()
+    func showNetworkError()
+    func buttonLock()
     
-    }
+}
 
 

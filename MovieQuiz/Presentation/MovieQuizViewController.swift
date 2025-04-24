@@ -35,7 +35,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     // MARK: - MovieQuizViewControllerProtocol
-   
+    
     
     // приватный метод вывода на экран вопроса, который принимает на вход вью модель вопроса и ничего не возвращает
     func show(quiz step: QuizStepViewModel) {
@@ -55,17 +55,17 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func showResult(quiz result: QuizResultsViewModel) {
-            let message = presenter.makeResultsMessage()
-            let model = AlertModel(
-                id: "Game results",
-                title: result.title,
-                message: message,
-                buttonText: result.buttonText) { [weak self] in
-                    guard let self = self else { return }
-                    self.presenter.restartGame()
-                }
-            alertPresenter?.showAlert(quiz: model)
-        }
+        let message = presenter.makeResultsMessage()
+        let model = AlertModel(
+            id: "Game results",
+            title: result.title,
+            message: message,
+            buttonText: result.buttonText) { [weak self] in
+                guard let self = self else { return }
+                self.presenter.restartGame()
+            }
+        alertPresenter?.showAlert(quiz: model)
+    }
     
     // метод показа индикатора загрузки
     func showLoadingIndicator() {

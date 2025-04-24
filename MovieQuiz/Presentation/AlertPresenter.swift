@@ -14,7 +14,7 @@ final class AlertPresenter {
         self.controller = controller
     }
     
-     func showAlert(quiz model: AlertModel) {
+    func showAlert(quiz model: AlertModel) {
         let alert = UIAlertController(
             title: model.title,
             message: model.message,
@@ -23,7 +23,7 @@ final class AlertPresenter {
         let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
             model.completion?()
         }
-         alert.view.accessibilityIdentifier = model.id
+        alert.view.accessibilityIdentifier = model.id
         alert.addAction(action)
         controller?.present(alert, animated: true, completion: nil)
     }

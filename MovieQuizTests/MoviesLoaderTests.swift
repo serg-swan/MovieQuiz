@@ -11,7 +11,7 @@ import Foundation
 
 
 final class MoviesLoaderTests: XCTestCase {
-    func testSucessLoading() throws {
+    func testSuccesLoading() throws {
         let stubNetworkClient = StubNetworkClient(emulateError: false) // говорим, что не хотим эмулировать ошибку
         let loader = MoviesLoader(networkClient: stubNetworkClient)
         
